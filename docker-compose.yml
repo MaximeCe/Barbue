@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: barbu-server
+    ports:
+      - "8765:8765"
+      - "8766:8766/udp"
+    environment:
+      - GAME_NAME=Partie locale
+    restart: unless-stopped
+
+  client1:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: barbu-client1
+    depends_on: [server]
+    network_mode: host            # UDP broadcast LAN
+    environment:
+      - DISPLAY=${DISPLAY}
+      - PLAYER_NAME=Joueur1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    profiles: ["local"]
+
+  client2:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: barbu-client2
+    depends_on: [server]
+    network_mode: host
+    environment:
+      - DISPLAY=${DISPLAY}
+      - PLAYER_NAME=Joueur2
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    profiles: ["local"]
+
+  client3:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: barbu-client3
+    depends_on: [server]
+    network_mode: host
+    environment:
+      - DISPLAY=${DISPLAY}
+      - PLAYER_NAME=Joueur3
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    profiles: ["local"]
+
+  client4:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: barbu-client4
+    depends_on: [server]
+    network_mode: host
+    environment:
+      - DISPLAY=${DISPLAY}
+      - PLAYER_NAME=Joueur4
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    profiles: ["local"]
